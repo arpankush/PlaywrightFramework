@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Locator } from '@playwright/test';
 
 test('has title', async ({ page }) => {
   await page.goto('https://playwright.dev/');
@@ -15,4 +15,31 @@ test('get started link', async ({ page }) => {
 
   // Expects page to have a heading with the name of Installation.
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+});
+
+test("Test input actions", async ({page}) => {
+  await page.goto('https://testautomationpractice.blogspot.com/');
+
+  //Check for name field readiness
+  const nameField:Locator = page.locator("#name");
+  await expect(nameField).toBeVisible();
+  await expect(nameField).toBeEnabled();
+
+  //Gather information of name field
+  const nameFieldMaxLength: string | null = await nameField.getAttribute("maxlength");
+  expect(nameFieldMaxLength).toBe("15");
+
+  //Enter data
+  const nameData = "Playwright";
+  await nameField.fill(nameData);
+
+  //Get data
+  const nameFieldInputValue = await nameField.inputValue();
+  console.log("Name field text content: " + await nameField.textContent());
+  console.log("Name field input value: " + nameFieldInputValue);
+
+  //Validate filled text
+  expect(nameFieldInputValue).toBe(nameData);
+
+  await page.waitForTimeout(5000);
 });
