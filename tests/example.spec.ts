@@ -43,3 +43,20 @@ test("Test input actions", async ({page}) => {
 
   await page.waitForTimeout(5000);
 });
+
+test("Test radio buttons", async ({page}) => {
+  await page.goto("https://testautomationpractice.blogspot.com/");
+
+  const maleRadio: Locator = await page.locator("input[name='gender'][value='male']");
+
+  await expect(maleRadio).toBeVisible();
+  await expect(maleRadio).toBeEnabled();
+
+  //Check the radio
+  await maleRadio.check();
+
+  console.log("maleRadio.isChecked(): " + maleRadio.isChecked())
+  expect(await maleRadio.isChecked()).toBe(true);
+  await expect(maleRadio).toBeChecked();
+
+});
