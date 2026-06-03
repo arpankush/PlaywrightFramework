@@ -67,7 +67,7 @@ test("Test Checkboxes", async ({page}) => {
   const days: string[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
 
 
-  //Select one checkbox
+  // //Select one checkbox
   const sundayCheckbox = page.getByLabel("Sunday");
   await sundayCheckbox.check();
 
@@ -105,4 +105,27 @@ test("Test Checkboxes", async ({page}) => {
 
   await page.waitForTimeout(2000);
 
+  const indexes = [1,3,5,6];
+
+  //Check the boxes with specific index
+  for(const i of indexes){
+    await checkboxes[i].check();
+    await expect(checkboxes[i]).toBeChecked();
+  }
+
+  await page.waitForTimeout(2000);
+
+  //Check if a specific checbox label needs to be unchecked
+  const notMyDay = "FRIDAY";
+
+  for(const day of days){
+    if(day.toLowerCase() === notMyDay.toLowerCase()){
+      const notMyDayLabel = page.getByLabel(day);
+      await notMyDayLabel.uncheck();
+      await expect(notMyDayLabel).not.toBeChecked();
+    }
+  }
+
+    await page.waitForTimeout(5000);
+  
 });
