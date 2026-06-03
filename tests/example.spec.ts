@@ -60,3 +60,49 @@ test("Test radio buttons", async ({page}) => {
   await expect(maleRadio).toBeChecked();
 
 });
+
+test("Test Checkboxes", async ({page}) => {
+  await page.goto("https://testautomationpractice.blogspot.com/");
+  
+  const days: string[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
+
+
+  //Select one checkbox
+  const sundayCheckbox = page.getByLabel("Sunday");
+  await sundayCheckbox.check();
+
+  await page.waitForTimeout(2000);
+
+  //Fetch locator for all checkboxes
+  const checkboxes: Locator[] = days.map(value => page.getByLabel(value));
+  expect(checkboxes.length).toBe(7);
+
+  //Check all boxes
+  for(const checkbox of checkboxes){
+    await checkbox.check();
+    await expect(checkbox).toBeChecked();
+  }
+
+  await page.waitForTimeout(2000);
+
+  //Uncheck last 3 checkboxes
+  for(const checkbox of checkboxes.slice(-3)){
+    await checkbox.uncheck();
+    await expect(checkbox).not.toBeChecked();
+  }
+
+  await page.waitForTimeout(2000);
+
+  //Uncheck already checked and vice versa
+  for(const checkbox of checkboxes){
+    if(await checkbox.isChecked()){
+      await checkbox.uncheck();
+    }
+    else{
+      await checkbox.check();
+    }
+  }
+
+  await page.waitForTimeout(2000);
+
+});
